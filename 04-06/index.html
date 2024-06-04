@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      .outer {
+        width: 20%;
+        margin: 5vh auto 0;
+        border: 1px solid #000;
+        padding: 2.5vw;
+        z-index: 200;
+        border-radius: 5px;
+      }
+
+      .inner {
+        background-color: #000;
+        padding: 2.5vw;
+        border-radius: 5px;
+      }
+
+      .light {
+        background-color: #ccc;
+        width: 10vw;
+        height: 10vw;
+        margin-bottom: 10px;
+        border-radius: 50%;
+      }
+
+      .light:last-child {
+        margin-bottom: 0;
+      }
+
+      .stop.on {
+        background-color: #f00;
+      }
+
+      .caution.on {
+        background-color: #ff0;
+      }
+
+      .go.on {
+        background-color: #0f0;
+      }
+
+      footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #eee;
+        padding: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      footer button {
+        background-color: #eee;
+        padding: 15px;
+        border-radius: 5px;
+        margin-inline-end: 5px;
+      }
+
+      button.stop {
+        background-color: red;
+        color: white;
+      }
+
+      button.caution {
+        background-color: yellow;
+      }
+
+      button.go {
+        background-color: green;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="inner">
+        <div class="light stop"></div>
+        <div class="light caution"></div>
+        <div class="light go"></div>
+      </div>
+    </div>
+
+    <footer>
+      <button id="stop">Stop</button>
+      <button id="caution">Caution</button>
+      <button id="go">Go</button>
+      <button id="run">Run</button>
+    </footer>
+
+    <script>
+      // FORK THIS PEN
+
+      // 1. Wire up the buttons to the lights
+
+      // You'll have to select and store the lights as a variable (although it may help you later to have a reference to all of them at once via the 'light' class)
+
+      // You'll have to select and store the buttons as separate variables
+
+      // then, add an event listener to each of the buttons
+
+      // in the 'handler' (the function you give to the listener) you add a class of 'on' to the relevant light
+
+      // Also make the lights go on and off on hover (of the light!!)
+
+      // 2. (Extra credit): Have a go at making it so that only one light can be on at one time
+
+      // 3. (wild&crazy credit) See if you can set up a timer of some sort to do that automatically (You'll have to add new start and stop buttons to the page)
+
+      const { log } = console;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const stopButton = document.getElementById("stop");
+        const stopLight = document.querySelector(".light.stop");
+        const cautionButton = document.getElementById("caution");
+        const cautionLight = document.querySelector(".light.caution");
+        const goButton = document.getElementById("go");
+        const goLight = document.querySelector(".light.go");
+        const runButton = document.getElementById("run");
+        const lights = [
+          { light: stopLight, inOn: false },
+          { light: cautionLight, isOn: false },
+          { light: goLight, isOn: false },
+        ];
+
+        stopButton.addEventListener("click", (e) => {
+          buttonClick(0);
+        });
+        cautionButton.addEventListener("click", (e) => {
+          buttonClick(1);
+        });
+        goButton.addEventListener("click", (e) => {
+          buttonClick(2);
+        });
+
+        function reset() {
+          for (let i = 0; i < lights.length; i++) {
+            lights[i].isOn = false;
+            lights[i].light.classList.remove("on");
+          }
+        }
+
+        function buttonClick(index) {
+          if (lights[index].inOn === false) {
+            reset();
+            lightOn(index);
+          } else {
+            lights[index].light.classList.remove("on");
+            lights[index].inOn = false;
+          }
+        }
+        function lightOn(index) {
+          lights[index].light.classList.add("on");
+          lights[index].inOn = true;
+        }
+
+        runButton.addEventListener("click", (e) => {
+          console.log("test");
+          runLights(counter);
+        });
+        const counter = 0;
+        const runLights = (i) => {
+          setTimeout(() => {
+            console.log("Phase " + i);
+
+            switch (i) {
+              case 0:
+                lightOn(0);
+                console.log("case " + i);
+                console.log(lights);
+                i++;
+                break;
+              case 1:
+                lightOn(1);
+                console.log("case " + i);
+                console.log(lights);
+                i++;
+                break;
+              case 2:
+                reset();
+                lightOn(2);
+                console.log("case " + i);
+                console.log(lights);
+                i++;
+                break;
+              case 3:
+                reset();
+                lightOn(1);
+                console.log("case " + i);
+                console.log(lights);
+                i++;
+
+                break;
+              case 4:
+                reset();
+                lightOn(0);
+                console.log("case " + i);
+                console.log(lights);
+                i++;
+
+                break;
+            }
+            if (i < 5) {
+              runLights(i);
+            }
+          }, 4000);
+        };
+      });
+    </script>
+  </body>
+</html>
